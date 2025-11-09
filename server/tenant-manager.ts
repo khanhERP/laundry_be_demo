@@ -114,6 +114,22 @@ class TenantManager {
         storeName: "Store 5 - Cửa hàng 0108670987-008",
         isActive: true,
       },
+      {
+        subdomain: "laundrydemo-001",
+        databaseUrl:
+          process.env.DATABASE_0108670987 ||
+          process.env.EXTERNAL_DB_0108670987!,
+        storeName: "Store 5 - Cửa hàng 0108670987-008",
+        isActive: true,
+      },
+      {
+        subdomain: "laundrydemo-002",
+        databaseUrl:
+          process.env.DATABASE_0108670987 ||
+          process.env.EXTERNAL_DB_0108670987!,
+        storeName: "Store 5 - Cửa hàng 0108670987-008",
+        isActive: true,
+      },
       // Add more tenants as needed
     ];
 

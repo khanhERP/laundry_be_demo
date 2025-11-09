@@ -201,6 +201,22 @@ class DatabaseManager {
         storeName: "Store 5 - Cửa hàng 0108670987-008",
         isActive: true,
       },
+      {
+        subdomain: "laundrydemo-001",
+        databaseUrl:
+          process.env.DATABASE_0108670987 ||
+          process.env.EXTERNAL_DB_0108670987!,
+        storeName: "Store 5 - Cửa hàng 0108670987-008",
+        isActive: true,
+      },
+      {
+        subdomain: "laundrydemo-002",
+        databaseUrl:
+          process.env.DATABASE_0108670987 ||
+          process.env.EXTERNAL_DB_0108670987!,
+        storeName: "Store 5 - Cửa hàng 0108670987-008",
+        isActive: true,
+      },
     ];
 
     // Initialize each tenant database
@@ -874,29 +890,15 @@ export async function initializeSampleData() {
         CREATE TABLE IF NOT EXISTS order_change_history (
           id SERIAL PRIMARY KEY,
           order_id INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
-          order_number VARCHAR(100),
           changed_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-          ip_address VARCHAR(255) NOT NULL,
+          ip_address VARCHAR(45) NOT NULL,
           user_id INTEGER,
           user_name VARCHAR(255) NOT NULL,
           action VARCHAR(50) NOT NULL DEFAULT 'edit',
           detailed_description TEXT NOT NULL,
           store_code VARCHAR(50),
-          store_name VARCHAR(255),
           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         )
-      `);
-
-      // Ensure order_number column exists (migration for existing tables)
-      await db.execute(sql`
-        ALTER TABLE order_change_history 
-        ADD COLUMN IF NOT EXISTS order_number VARCHAR(100)
-      `);
-
-      // Ensure store_name column exists (migration for existing tables)
-      await db.execute(sql`
-        ALTER TABLE order_change_history 
-        ADD COLUMN IF NOT EXISTS store_name VARCHAR(255)
       `);
 
       // Create indexes for better performance
@@ -908,12 +910,6 @@ export async function initializeSampleData() {
       `);
       await db.execute(sql`
         CREATE INDEX IF NOT EXISTS idx_order_change_history_store_code ON order_change_history(store_code)
-      `);
-      await db.execute(sql`
-        CREATE INDEX IF NOT EXISTS idx_order_change_history_order_number ON order_change_history(order_number)
-      `);
-      await db.execute(sql`
-        CREATE INDEX IF NOT EXISTS idx_order_change_history_store_name ON order_change_history(store_name)
       `);
 
       console.log("✅ Order change history table initialized successfully");
